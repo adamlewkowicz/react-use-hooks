@@ -1,25 +1,23 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from 'react';
 
-export function useLocalStorage<T>(key: string) {
-  const [data, setData] = useState<T | null>((): T | null => {
-    const result = localStorage.getItem(key);
-    if (result !== null) {
-      return JSON.parse(result);
+
+export function useLocalStorage<T extends LSObject>(): [T, (nextData: T) => void] {
+  const [data, setData] = useState<T>(() => ({ ...localStorage } as any));
+  
+  const handleDataUpdate = useCallback((nextData: T) => {
+    setData(data => ({ ...data, ...nextData }));
+
+    for (const key in nextData) {
+      localStorage.setItem(key, JSON.stringify(nextData[key]));
     }
-    return result;
-  });
-
-  const handleDataUpdate = useCallback(
-    (nextData: T) => {
-      localStorage.setItem(key, JSON.stringify(nextData));
-      setData(nextData);
-    }, [key]
-  );
+  }, [setData]);
 
   return [data, handleDataUpdate];
 }
 
-function Component() {
-  const [token, setToken] = useLocalStorage<string>('token');
-  setToken('my new token');
+
+export interface LSObject {
+  [key: string]: string | number | boolean | null | undefined
 }
+
+export type LSContext<T extends LSObject> = [T, (nextData: T) => void];
