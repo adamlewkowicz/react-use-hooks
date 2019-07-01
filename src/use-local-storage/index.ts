@@ -14,10 +14,3 @@ export function useLocalStorage<T>(
 
   return [data, setData];
 }
-
-
-export interface LSObject {
-  [key: string]: string | number | boolean | null | undefined
-}
-
-export type LSContext<T extends LSObject> = [T, (nextData: T) => void];

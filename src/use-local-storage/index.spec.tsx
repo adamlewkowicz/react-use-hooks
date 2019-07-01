@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLocalStorage } from './hook';
+import { useLocalStorage } from '.';
 
 interface MyLocalStorage {
   darkMode: boolean

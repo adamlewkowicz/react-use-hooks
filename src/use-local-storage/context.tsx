@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useMemo, Context } from "react";
-import { LSObject, useLocalStorage } from "./hook";
+import { useLocalStorage } from ".";
 
 
 export function createLSContext<T extends LSObject>(initialState: T) {
@@ -24,3 +24,9 @@ export function LocalStorageProvider<C extends LSObject>({
     </LocalStorageContext.Provider>
   );
 }
+
+export interface LSObject {
+  [key: string]: string | number | boolean | null | undefined
+}
+
+export type LSContext<T extends LSObject> = [T, (nextData: T) => void];
