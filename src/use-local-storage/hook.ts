@@ -1,18 +1,18 @@
-import { useCallback, useState } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 
-export function useLocalStorage<T extends LSObject>(): [T, (nextData: T) => void] {
-  const [data, setData] = useState<T>(() => ({ ...localStorage } as any));
+export function useLocalStorage<T>(
+  initialData?: T
+): [T, Dispatch<SetStateAction<T>>] {
+  const [data, setData] = useState<T>(() => ({ ...initialData, ...localStorage }));
   
-  const handleDataUpdate = useCallback((nextData: T) => {
-    setData(data => ({ ...data, ...nextData }));
-
-    for (const key in nextData) {
-      localStorage.setItem(key, JSON.stringify(nextData[key]));
+  useEffect(() => {
+    for (const key in data) {
+      localStorage.setItem(key, JSON.stringify(data[key]));
     }
-  }, [setData]);
+  }, [data]);
 
-  return [data, handleDataUpdate];
+  return [data, setData];
 }
 
 
