@@ -4,8 +4,7 @@
     ],
     "compilerOptions": {
         "lib": [
-            "es2019",
-            "es2019.object",
+            "es2018",
             "dom"
         ],
         "jsx": "react"
