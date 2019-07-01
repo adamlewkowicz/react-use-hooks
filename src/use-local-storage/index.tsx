@@ -1,10 +1,10 @@
-import { createContext, useState, useMemo, ReactNode, Dispatch, SetStateAction } from "react";
+import { createContext, useState, useMemo, ReactNode, useCallback } from "react";
 
 interface LSObject {
   [key: string]: string | number | boolean | null | undefined
 }
 
-type LSContext<S extends LSObject> = [S, Dispatch<SetStateAction<S>>];
+type LSContext<S extends LSObject> = [S, (nextData: LSObject) => void];
 
 export const LocalStorageContext = createContext<LSContext<LSObject>>([
   {},
@@ -20,15 +20,15 @@ export function LocalStorageProvider({
 }: LocalStorageProviderProps) {
   const [data, setData] = useState<LSObject>(() => ({ ...localStorage }));
   
-  function handleDataUpdate(nextData: LSObject) {
+  const handleDataUpdate = useCallback((nextData: LSObject) => {
     setData(data => ({ ...data, ...nextData }));
 
     for (const key in nextData) {
       localStorage.setItem(key, JSON.stringify(nextData[key]));
     }
-  }
+  }, [setData]);
 
-  const value = useMemo((): LSContext<LSObject> => [data, setData], [data, setData]);
+  const value = useMemo((): LSContext<LSObject> => [data, handleDataUpdate], [data, handleDataUpdate]);
 
   return (
     <LocalStorageContext.Provider value={value}>
