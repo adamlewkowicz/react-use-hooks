@@ -1,4 +1,4 @@
-import { createContext, useState, useMemo, ReactNode, useCallback } from "react";
+import { createContext, useState, useMemo, ReactNode, useCallback, useContext } from "react";
 
 interface LSObject {
   [key: string]: string | number | boolean | null | undefined
@@ -37,8 +37,18 @@ export function LocalStorageProvider({
   );
 }
 
+/**
+ * @example
+ */
+interface MyData extends LSObject {
+  darkTheme?: boolean
+}
+function Component() {
+  const [data, setData] = useContext<LSContext<MyData>>(LocalStorageContext);
+  return <button onClick={() => setData({ darkTheme: !data.darkTheme })} />;
+}
 
-function useMemoizedState<S>(stateData: S) {
-  const [state, setState] = useState<S>(stateData);
+function useMemoizedState<S>(initialState: S | (() => S)) {
+  const [state, setState] = useState<S>(initialState);
   return useMemo(() => [state, setState], [state, setState]);
 }
