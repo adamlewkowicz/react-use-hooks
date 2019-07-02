@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, createContext } from "react";
-import { useCookies } from "./use-cookies";
+import { useCookies } from "./";
 
 interface CookiesObject {
   [key: string]: string | number | boolean | null | undefined
