@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useLocalStorage } from '.';
 import { render, fireEvent } from '@testing-library/react';
 
-interface MyLocalStorage {
-  darkMode: boolean
-}
 
 describe('useLocalStorage', () => {
+
   test('saves updated data in local storage', async () => {
+    const PROP_NAME = 'darkMode';
+
     function Component() {
       const [storage, setStorage] = useLocalStorage<MyLocalStorage>({ darkMode: true });
 
@@ -37,13 +37,19 @@ describe('useLocalStorage', () => {
     await fireEvent.click(button);
 
     getByText('light');
-    expect(localStorage.__STORE__.darkMode).toEqual("false");
-    /* Create useStateDiff for not overusing setItem method */
-    expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+    expect(localStorage.__STORE__[PROP_NAME]).toEqual("false");
+    expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(localStorage.setItem).toHaveBeenCalledWith(PROP_NAME, "false");
 
     await fireEvent.click(button);
 
     getByText('dark');
-    expect(localStorage.__STORE__.darkMode).toEqual("true");
+    expect(localStorage.__STORE__[PROP_NAME]).toEqual("true");
+    expect(localStorage.setItem).toHaveBeenLastCalledWith(PROP_NAME, "true");
   });
+  
 });
+
+interface MyLocalStorage {
+  darkMode: boolean
+}
