@@ -7,9 +7,9 @@ export function useLocalStorage<T>(
   const [data, setData] = useState<T>(() => ({ ...initialData, ...localStorage }));
   const prevData = usePrevState(data);
 
-  if (prevData !== data) {
+  if (!Object.is(prevData, data)) {
     for (const key in prevData) {
-      if (prevData[key] !== data[key]) {
+      if (!Object.is(prevData[key], data[key])) {
         localStorage.setItem(key, JSON.stringify(data[key]));
       }
     }
