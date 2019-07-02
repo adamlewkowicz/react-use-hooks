@@ -1,8 +1,8 @@
 {
-  "name": "new",
+  "name": "@art4/react-use-hooks",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Set of modular and reusable hooks for React",
+  "keywords": ["react.js", "react", "hooks", "use"],
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "dependencies": {},
@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepublishOnly": "tsc"
   },
   "browserslist": [
     ">0.2%",
