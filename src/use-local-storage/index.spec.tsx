@@ -7,7 +7,7 @@ interface MyLocalStorage {
 }
 
 describe('useLocalStorage', () => {
-  test('', async () => {
+  test('saves updated data in local storage', async () => {
     function Component() {
       const [storage, setStorage] = useLocalStorage<MyLocalStorage>({ darkMode: true });
 
@@ -37,9 +37,13 @@ describe('useLocalStorage', () => {
     await fireEvent.click(button);
 
     getByText('light');
-
-    expect(localStorage.__STORE__).toStrictEqual({ darkMode: false });
+    expect(localStorage.__STORE__.darkMode).toEqual("false");
     /* Create useStateDiff for not overusing setItem method */
-    expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(localStorage.setItem).toHaveBeenCalledTimes(2);
+
+    await fireEvent.click(button);
+
+    getByText('dark');
+    expect(localStorage.__STORE__.darkMode).toEqual("true");
   });
 });
