@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useMemo, ReactNode, useContext } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * Returns an array (useState) of object with parsed cookies and function for updating.
