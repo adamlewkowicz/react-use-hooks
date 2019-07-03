@@ -1,6 +1,13 @@
 import * as React from "react";
 import { useFetch } from ".";
 import { render } from "@testing-library/react"; 
+import * as fetch from "node-fetch";
+
+(global as any).fetch = jest.fn(async () => ({
+  async json() {
+    return { id: 1, name: 'wew' }
+  }
+}));
 
 interface Product {
   id: number
@@ -10,13 +17,15 @@ interface Product {
 test('', async () => {
   function Component({ productId }) {
     const { data: product, isFetching } = useFetch<Product>(
-      `/products/${productId}`,
+      `http://domain.com/products/${productId}`,
       null,
       { deps: [productId] }
     );
 
     if (isFetching) {
       return <div>Loading...</div>
+    } else if (product === null) {
+      return <div>No product was found for the given id</div>
     }
     
     return (
@@ -32,6 +41,11 @@ test('', async () => {
       </div>
     );
   }
+
+  ((global as any).fetch as jest.Mock)
+    .mockResolvedValue({
+      json: jest.fn(async () => ({ id: 1, name: firstProductName }))
+    })
 
   let productId = 1;
   const firstProductName = 'Apple';
