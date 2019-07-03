@@ -38,7 +38,7 @@ export function useFetch<T>(
         payload: { response }
       });
     }
-  }, [dispatch]);
+  }, [url, config, depsOrOptions, dispatch]);
 
   useEffect(() => {
     if (state.isFetching) {
@@ -47,7 +47,7 @@ export function useFetch<T>(
     handleRequest();
 
     return () => controller.abort();
-  }, dependencies);
+  }, [url, config, ...dependencies]);
 
 
   return {

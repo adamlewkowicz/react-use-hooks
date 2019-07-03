@@ -1,73 +1,87 @@
 import * as React from "react";
 import { useFetch } from ".";
-import { render } from "@testing-library/react"; 
-import * as fetch from "node-fetch";
-
-(global as any).fetch = jest.fn(async () => ({
-  async json() {
-    return { id: 1, name: 'wew' }
-  }
-}));
+import { render } from "@testing-library/react";
 
 interface Product {
-  id: number
-  name: string
+  id: number;
+  name: string;
 }
 
-test('', async () => {
-  function Component({ productId }) {
-    const { data: product, isFetching } = useFetch<Product>(
-      `http://domain.com/products/${productId}`,
-      null,
-      { deps: [productId] }
-    );
+function Component({ domain, productId }) {
+  const { data: product, isFetching } = useFetch<Product>(
+    `${domain}${productId}`,
+    null,
+    { deps: [productId] }
+  );
 
-    if (isFetching) {
-      return <div>Loading...</div>
-    } else if (product === null) {
-      return <div>No product was found for the given id</div>
-    }
-    
-    return (
-      <div>
-        <p>Product {product.name}</p>
-        This is product with id of {product.id}
-        <button
-          data-testid="next-product-btn"
-          onClick={() => {}}
-        >
-          Show next product
-        </button>
-      </div>
-    );
+  if (isFetching) {
+    return <div>Loading...</div>;
+  } else if (product === null) {
+    return <div>No product was found for the given id</div>;
   }
 
-  ((global as any).fetch as jest.Mock)
-    .mockResolvedValue({
-      json: jest.fn(async () => ({ id: 1, name: firstProductName }))
-    })
+  return (
+    <div>
+      <p>Product: {product.name}</p>
+      This is product with id of {product.id}
+      <button data-testid="next-product-btn" onClick={() => {}}>
+        Show next product
+      </button>
+    </div>
+  );
+}
 
-  let productId = 1;
-  const firstProductName = 'Apple';
-  const secondProductName = 'Croissant';
+test('fetch calls are handled properly', async () => {
+  const domain = "http://domain.com/products/";
+  const loadingText = "Loading...";
+  const { signal } = new AbortController();
+  const [firstProduct, secondProduct] = [
+    {
+      id: 1,
+      name: 'Apple'
+    },
+    {
+      id: 2,
+      name: 'Croissant'
+    }
+  ]
+
+  jest
+    .spyOn(global, 'fetch' as any)
+    .mockResolvedValueOnce({
+      ok: true,
+      async json() {
+        return firstProduct;
+      }
+    })
+    .mockResolvedValueOnce({
+      ok: true,
+      async json() {
+        return secondProduct;
+      }
+    });
 
   const { findByText, rerender, getByText } = render(
-    <Component productId={productId} />
+    <Component
+      domain={domain}
+      productId={firstProduct.id}
+    />
   );
-  const loading = 'Loading...';
 
-  getByText(loading);
-  await findByText(`Product ${firstProductName}`);
+  getByText(loadingText);
+  await findByText(`Product: ${firstProduct.name}`);
 
-  productId++;
-  
-  rerender(<Component productId={productId} />);
+  rerender(
+    <Component
+      domain={domain}
+      productId={secondProduct.id}
+    />
+  );
 
-  getByText(loading);
-  await findByText(`Product ${secondProductName}`);
-  
+  getByText(loadingText);
+  await findByText(`Product: ${secondProduct.name}`);
+
   expect(fetch).toHaveBeenCalledTimes(2);
-  expect(fetch).toHaveBeenLastCalledWith(`/products/${productId}`)
-
-  // await findByTestId('next-product-btn');
+  expect(fetch).toHaveBeenNthCalledWith(1, `${domain}${firstProduct.id}`, { signal });
+  expect(fetch).toHaveBeenNthCalledWith(2, `${domain}${secondProduct.id}`, { signal });
 });
