@@ -4,7 +4,6 @@ export interface FetchState<T> {
   isError: boolean
   response: Response | null
   data: T | null
-  controller: AbortController | null
 }
 
 export const initialState: FetchState<any> = {
@@ -12,7 +11,6 @@ export const initialState: FetchState<any> = {
   isError: false,
   response: null,
   data: null,
-  controller: null
 }
 
 export function fetchReducer<T>(
@@ -23,24 +21,21 @@ export function fetchReducer<T>(
     case 'FETCH_REQUESTED': return {
       ...state,
       isFetching: true,
-      isError: false,
-      controller: action.payload
+      isError: false
     }
     case 'FETCH_SUCCEEDED': return {
       ...state,
       response: action.payload.response,
       data: action.payload.data,
       isFetching: false,
-      isError: false,
-      controller: null
+      isError: false
     }
     case 'FETCH_FAILED': return {
       ...state,
       response: action.payload.response,
       data: null,
       isFetching: false,
-      isError: true,
-      controller: null
+      isError: true
     }
     default: throw Error;
   }
@@ -48,7 +43,6 @@ export function fetchReducer<T>(
 
 interface FetchRequested {
   type: 'FETCH_REQUESTED'
-  payload: AbortController
 }
 
 interface FetchSucceeded<T> {

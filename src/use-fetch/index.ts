@@ -1,5 +1,6 @@
 import { useReducer, useEffect, DependencyList, Reducer, useCallback } from 'react';
 import { fetchReducer, initialState, FetchAction, FetchState } from './reducer';
+import { useLazyRef } from '../use-lazy-ref';
 
 export function useFetch<T>(
   url: string,
@@ -9,16 +10,12 @@ export function useFetch<T>(
   const [state, dispatch] = useReducer<Reducer<FetchState<T>, FetchAction<T>>>(
     fetchReducer, initialState
   );
-  const { controller, ...restState } = state;
+  const { current: controller } = useLazyRef(() => new AbortController());
 
   const handleRequest = useCallback(async () => {
-    const controller = new AbortController();
     const { signal } = controller;
 
-    dispatch({
-      type: 'FETCH_REQUESTED',
-      payload: controller
-    });
+    dispatch({ type: 'FETCH_REQUESTED' });
 
     const response = await fetch(url, { ...options, signal });
 
@@ -40,31 +37,25 @@ export function useFetch<T>(
   }, [dispatch]);
 
   useEffect(() => {
-    if (state.isFetching && controller) {
+    if (state.isFetching) {
       controller.abort();
     }
     handleRequest();
 
-    return () => {
-      if (controller) {
-        controller.abort();
-      }
-    }
+    return () => controller.abort();
   }, dependencies);
 
 
   return {
-    ...restState,
-    cancel: controller ? controller.abort : () => {}
+    ...state,
+    cancel: controller.abort
   }
 }
-
-type AnyFunction = () => {}
 
 interface UseFetchResult<T> {
   isFetching: boolean
   isError: boolean
   response: Response | null
   data: T | null
-  cancel: AbortController['abort'] | AnyFunction
+  cancel: AbortController['abort']
 }
