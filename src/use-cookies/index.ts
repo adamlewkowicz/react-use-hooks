@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 /**
  * Returns an array (useState) of object with parsed cookies and function for updating.
  */
-export function useCookies<T>() {
+export function useCookies<T>(): [T, Dispatch<SetStateAction<T>>] {
   const [cookies, setCookies] = useState<T>(() => parseCookies<T>(document.cookie));
 
   useEffect(() => {

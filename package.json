@@ -2,7 +2,12 @@
   "name": "@art4/react-use-hooks",
   "version": "1.0.0",
   "description": "Set of modular and reusable hooks for React",
-  "keywords": ["react.js", "react", "hooks", "use"],
+  "keywords": [
+    "react.js",
+    "react",
+    "hooks",
+    "use"
+  ],
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "dependencies": {},
