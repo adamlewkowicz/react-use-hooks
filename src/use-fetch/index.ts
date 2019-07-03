@@ -4,7 +4,7 @@ import { useLazyRef } from '../use-lazy-ref';
 
 export function useFetch<T>(
   url: string,
-  options?: RequestInit,
+  config?: RequestInit,
   depsOrOptions: DepsOrOptions = defaultOptions
 ): UseFetchResult<T> {
   const { parser, deps: dependencies } = useMemo(() =>
@@ -21,7 +21,7 @@ export function useFetch<T>(
 
     dispatch({ type: 'FETCH_REQUESTED' });
 
-    const response = await fetch(url, { ...options, signal });
+    const response = await fetch(url, { ...config, signal });
 
     if (response.ok) {
       const data: T = await response[parser]();
@@ -86,10 +86,6 @@ interface ParsedOptions {
   deps: DependencyList 
 }
 
-interface UseFetchResult<T> {
-  isFetching: boolean
-  isError: boolean
-  response: Response | null
-  data: T | null
+interface UseFetchResult<T> extends FetchState<T> {
   cancel: AbortController['abort']
 }
