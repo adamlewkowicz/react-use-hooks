@@ -17,25 +17,30 @@ export function useFetch<T>(
   const { current: controller } = useLazyRef(() => new AbortController());
 
   const handleRequest = useCallback(async () => {
-    const { signal } = controller;
+    try {
+      dispatch({ type: 'FETCH_REQUESTED' });
+      const { signal } = controller;
+      const response = await fetch(url, { ...config, signal });
 
-    dispatch({ type: 'FETCH_REQUESTED' });
-
-    const response = await fetch(url, { ...config, signal });
-
-    if (response.ok) {
-      const data: T = await response[parser]();
-      dispatch({
-        type: 'FETCH_SUCCEEDED',
-        payload: {
-          response,
-          data
-        }
-      });
-    } else {
+      if (response.ok) {
+        const data: T = await response[parser]();
+        dispatch({
+          type: 'FETCH_SUCCEEDED',
+          payload: {
+            response,
+            data
+          }
+        });
+      } else {
+        dispatch({
+          type: 'FETCH_FAILED',
+          payload: { response }
+        });
+      }
+    } catch(error) {
       dispatch({
         type: 'FETCH_FAILED',
-        payload: { response }
+        error
       });
     }
   }, [url, config, depsOrOptions, dispatch]);

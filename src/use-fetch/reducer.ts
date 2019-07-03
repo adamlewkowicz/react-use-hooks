@@ -4,6 +4,7 @@ export interface FetchState<T> {
   isError: boolean
   response: Response | null
   data: T | null
+  error: Error | null
 }
 
 export const initialState: FetchState<any> = {
@@ -11,6 +12,7 @@ export const initialState: FetchState<any> = {
   isError: false,
   response: null,
   data: null,
+  error: null,
 }
 
 export function fetchReducer<T>(
@@ -27,12 +29,14 @@ export function fetchReducer<T>(
       ...state,
       response: action.payload.response,
       data: action.payload.data,
+      error: null,
       isFetching: false,
       isError: false
     }
     case 'FETCH_FAILED': return {
       ...state,
-      response: action.payload.response,
+      response: action.payload ? action.payload.response : null,
+      error: action.error || null,
       data: null,
       isFetching: false,
       isError: true
@@ -55,9 +59,10 @@ interface FetchSucceeded<T> {
 
 interface FetchFailed {
   type: 'FETCH_FAILED'
-  payload: {
+  payload?: {
     response: Response
   }
+  error?: Error
 }
 
 export type FetchAction<T> =
