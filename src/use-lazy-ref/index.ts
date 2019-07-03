@@ -5,7 +5,7 @@ export function useLazyRef<T>(
 ): MutableRefObject<T> {
   const ref = useRef<T>(null);
 
-  if (ref === null) {
+  if (ref.current === null) {
     ref.current = initialValue();
   }
 
