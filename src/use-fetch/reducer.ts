@@ -1,13 +1,13 @@
 
 export interface FetchState<T> {
-  isFetching: boolean
+  isLoading: boolean
   isError: boolean
   response: Response | null
   data: T | null
 }
 
 export const initialState: FetchState<any> = {
-  isFetching: true,
+  isLoading: true,
   isError: false,
   response: null,
   data: null,
@@ -20,21 +20,21 @@ export function fetchReducer<T>(
   switch(action.type) {
     case 'FETCH_REQUESTED': return {
       ...state,
-      isFetching: true,
+      isLoading: true,
       isError: false
     }
     case 'FETCH_SUCCEEDED': return {
       ...state,
       response: action.payload.response,
       data: action.payload.data,
-      isFetching: false,
+      isLoading: false,
       isError: false
     }
     case 'FETCH_FAILED': return {
       ...state,
       response: action.payload.response,
       data: null,
-      isFetching: false,
+      isLoading: false,
       isError: true
     }
     default: throw Error;

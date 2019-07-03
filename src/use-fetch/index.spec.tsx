@@ -8,13 +8,13 @@ interface Product {
 }
 
 function Component({ domain, productId }) {
-  const { data: product, isFetching } = useFetch<Product>(
+  const { data: product, isLoading } = useFetch<Product>(
     `${domain}${productId}`,
     null,
     { deps: [productId] }
   );
 
-  if (isFetching) {
+  if (isLoading) {
     return <div>Loading...</div>;
   } else if (product === null) {
     return <div>No product was found for the given id</div>;

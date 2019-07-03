@@ -41,7 +41,7 @@ export function useFetch<T>(
   }, [url, config, depsOrOptions, dispatch]);
 
   useEffect(() => {
-    if (state.isFetching) {
+    if (state.isLoading) {
       controller.abort();
     }
     handleRequest();
