@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useIntersectionObserver } from "../use-intersection-observer";
+import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 
 interface IntersectionObserverProps extends IntersectionObserverInit {
   children?: React.ReactElement

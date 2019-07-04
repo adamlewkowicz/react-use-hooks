@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from 'react';
-import { usePrevState } from '../use-prev-state';
+import { usePrevState } from '../usePrevState';
 
 export function useLocalStorage<T>(
   initialData?: T

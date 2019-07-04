@@ -1,6 +1,6 @@
 import { useReducer, useEffect, DependencyList, Reducer, useCallback, useMemo } from 'react';
 import { fetchReducer, initialState, FetchAction, FetchState } from './reducer';
-import { useLazyRef } from '../use-lazy-ref';
+import { useLazyRef } from '../useLazyRef';
 
 export function useFetch<T>(
   url: string,
