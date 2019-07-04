@@ -7,3 +7,15 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => {
     observe: jest.fn()
   }
 });
+
+// global.AbortController = jest.fn().mockImplementation(() => {
+//   return {
+//     signal: {
+//       aborted: false,
+//       onabort: jest.fn(),
+//       addEventListener: jest.fn(),
+//       removeEventListener: jest.fn()
+//     },
+//     abort: jest.fn()
+//   }
+// });
