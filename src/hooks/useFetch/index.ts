@@ -2,6 +2,18 @@ import { useReducer, useEffect, DependencyList, Reducer, useCallback, useMemo } 
 import { fetchReducer, initialState, FetchAction, FetchState } from './reducer';
 import { useLazyRef } from '../useLazyRef';
 
+/**
+ * Stateful Fetch API for handling requests declaratively.
+ * Uses AbortController to abort previous calls, or to stop calls that have not been finished before unmount.
+ * @example
+ * const { data: product, isLoading } = useFetch(`domain.com/products/${id}`);
+ * 
+ * if (isLoading) {
+ *   return <div>Loading...</div>;
+ * }
+ * 
+ * return <div>Product: {product.name}</div>;
+ */
 export function useFetch<T>(
   url: string,
   config?: RequestInit,

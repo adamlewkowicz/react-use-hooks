@@ -6,6 +6,15 @@ const defaultOptions: IntersectionObserverInit = {
   threshold: 0
 }
 
+/**
+ * Creates intersection observer on returned ref.
+ * @example
+ * const ref = useIntersectionObserver(([entry]) => {
+ *   // Callback that is invoked on intersection.
+ * });
+ * 
+ * return <div ref={ref}></div>;
+ */
 export function useIntersectionObserver<T extends HTMLElement>(
   callback: IntersectionObserverCallback,
   options: IntersectionObserverInit = defaultOptions

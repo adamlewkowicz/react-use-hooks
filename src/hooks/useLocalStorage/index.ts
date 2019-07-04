@@ -1,6 +1,13 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import { usePrevState } from '../usePrevState';
 
+/**
+ * Returns loaded from Local Storage, stateful value, and function to update it.
+ * Automatically updates data in Local Storage, based on state updates.
+ * @example
+ * const defaultData = { darkTheme: false };
+ * const [storage, setStorage] = useLocalStorage(defaultData);
+ */
 export function useLocalStorage<T>(
   initialData?: T
 ): [T, Dispatch<SetStateAction<T>>] {
