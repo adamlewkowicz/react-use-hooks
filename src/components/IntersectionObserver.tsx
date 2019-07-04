@@ -5,6 +5,22 @@ interface IntersectionObserverProps extends IntersectionObserverInit {
   children?: React.ReactElement
   onIntersection: IntersectionObserverCallback
 }
+/**
+ * Use Intersection Observer declaratively as component.
+ * It observes it's child element.
+ * @example
+ * return (
+ *  <IntersectionObserver
+ *    onIntersection={fetchPosts}
+ *    rootMargin={'5px'}
+ *    threshold={1}
+ *  >
+ *    <div>
+ *      I am observed!
+ *    </div>
+ *  </IntersectionObserver>
+ * );
+ */
 export function IntersectionObserver({
   children,
   onIntersection,
