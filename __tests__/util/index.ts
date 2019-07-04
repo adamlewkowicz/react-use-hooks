@@ -3,7 +3,7 @@ const _AbortController = _global.AbortController;
 
 
 export function mockAbortController() {
-  _global._AbortControllerInstances = [];
+  global._AbortControllerInstances = [];
   _global.AbortController = jest.fn().mockImplementation(() => {
 
     const signal = {

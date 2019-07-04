@@ -10,5 +10,8 @@
         "jsx": "react",
         "outDir": "dist",
         "declaration": true
-    }
+    },
+    "files": [
+        "./global.d.ts"
+    ]
 }
