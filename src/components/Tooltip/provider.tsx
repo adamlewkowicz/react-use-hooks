@@ -1,15 +1,17 @@
 import * as React from "react";
 import { ReactNode, MouseEvent, useState, useMemo } from "react";
-import { TooltipComponent, ContainerProps } from "./types";
+import { TooltipComponent } from "./types";
 import { TooltipContext } from "./context";
+import { TooltipContainer, TooltipContainerOptions } from "./TooltipContainer";
 
-interface TooltipProviderProps {
+interface TooltipProviderProps extends TooltipContainerOptions {
   children: ReactNode
-  container?: (props: ContainerProps) => React.ReactElement
+  container?: TooltipContainer
 }
 export function TooltipProvider({
   children,
-  container: Container
+  container: Container = TooltipContainer,
+  ...containerOptions
 }: TooltipProviderProps) {
   const [Component, setComponent] = useState<null | TooltipComponent>(null);
   const [event, setEvent] = useState<null | MouseEvent<any>>(null);
@@ -27,13 +29,12 @@ export function TooltipProvider({
         {children}
       </TooltipContext.Provider>
       {Component && (
-        Container ? (
-          <Container event={event}>
-            <Component event={event} />
-          </Container>
-        ) : (
+        <Container
+          {...containerOptions}
+          event={event}
+        >
           <Component event={event} />
-        )
+        </Container>
       )}
     </>
   );
