@@ -43,39 +43,67 @@ function TooltipContainer({ children }: any) {
 interface TooltipContext {
   visible: boolean
   setVisible: () => boolean
-  Component: ReactNode
-  setComponent: () => ReactNode
+  Component: TooltipComponent
+  setComponent: () => TooltipComponent
 }
-const TooltipContext = createContext(null);
+const TooltipContext = React.createContext<TooltipContext>(null);
+
+
+// interface ContainerPlaceholderProps {
+//   event: MouseEvent<any>
+//   children: ReactNode
+// }
+// function ContainerPlaceholder(props: ContainerPlaceholderProps) {
+//   return props.children;
+// }
+interface ContainerProps {
+  children: ReactNode
+  event: MouseEvent<any>
+}
+
+interface TooltipComponentProps {
+  event: MouseEvent<any>
+}
+
+type TooltipComponent = (props: TooltipComponentProps) => React.ReactElement
+
 
 interface TooltipProviderProps {
   children: ReactNode
-  container?: typeof React.Component
+  container?: (props: ContainerProps) => React.ReactElement | any
 }
 function TooltipProvider({
   children,
   container: Container
 }: TooltipProviderProps) {
   const [visible, setVisible] = useState(false);
-  const [Component, setComponent] = useState(null);
+  const [Component, setComponent] = useState<null | TooltipComponent>(null);
+  const [event, setEvent] = useState<null | MouseEvent<any>>(null);
   
   const value = useMemo(() => ({
     visible,
     setVisible,
-    Component, setComponent
+    Component,
+    setComponent
   }), [visible, setVisible, Component, setComponent]);
 
 
+  function handleMouseMove(event: MouseEvent<any>) {
+    setEvent(event);
+  }
+
   return (
     <>
-      <TooltipContext.Provider value={value}>
+      <TooltipContext.Provider value={value as any}>
         {children}
       </TooltipContext.Provider>
       {visible && (
         Container ? (
-          <Container children={<Component />} />
+          <Container event={event}>
+            <Component event={event} />
+          </Container>
         ) : (
-          <Component />
+          <Component event={event} />
         )
       )}
     </>
@@ -83,22 +111,56 @@ function TooltipProvider({
 }
 
 
+export function useTooltip_<T extends HTMLElement>(
+  TooltipComponent: TooltipComponent
+  // tooltipComponent: (event: MouseEvent<T>) => TooltipComponent
+) {
+  const { setComponent } = useContext(TooltipContext);
+
+  function handleMouseOver(event: MouseEvent<T>) {
+    setComponent(
+      // <tooltipComponent
+
+      // />
+    );
+  }
+
+  function handleMouseOut() {
+  }
+
+  return (
+    <TooltipComponent />
+  )
+
+  return {
+    onMouseOver: handleMouseOver,
+    onMouseOut: handleMouseOut
+  }
+}
+
 function App() {
   return (
     <TooltipProvider
-      
-    >
-      <div {...useTooltip(({ screenX, screenY }) =>
-        <TooltipContainer
-          screenX={screenX}
-          screenY={screenY}
+      container={({ children, event }) => (
+        <div
+          className="tooltip-container"
+          style={{
+            left: event.clientX,
+            right: event.clientY
+          }}
         >
+          {children}
+        </div>
+      )}
+    >
+      <div {...useTooltip_(({ event }) => (
+        <> 
           <p>Tooltip details</p>
           <div>
             You can place everything in it's content
           </div>
-        </TooltipContainer>
-      )}>
+        </>
+      ))}>
         If you hover me, you gonna see the tooltip.
       </div>
     </TooltipProvider>
