@@ -23,6 +23,7 @@ export interface TooltipContainerOptions {
 interface TooltipContainerProps extends TooltipContainerOptions {
   children: ReactNode
   event: MouseEvent<any>
+  rect: DOMRect | ClientRect
 }
 export function TooltipContainer({
   floating = true,
@@ -30,6 +31,7 @@ export function TooltipContainer({
   margin = 10,
   className,
   event,
+  rect,
   children
 }: TooltipContainerProps) {
   return (

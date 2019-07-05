@@ -15,13 +15,13 @@ export function TooltipProvider({
 }: TooltipProviderProps) {
   const [Component, setComponent] = useState<null | TooltipComponent>(null);
   const [event, setEvent] = useState<null | MouseEvent<any>>(null);
+  const [targetRect, setTargetRect] = useState<null | DOMRect | ClientRect>(null);
   
   const value = useMemo(() => ({
-    Component,
     setComponent,
-    event,
-    setEvent
-  }), [Component, setComponent, event, setEvent]);
+    setEvent,
+    setTargetRect
+  }), [setComponent, setEvent, setTargetRect]);
 
   return (
     <>
@@ -31,6 +31,7 @@ export function TooltipProvider({
       {Component && (
         <Container
           {...containerOptions}
+          rect={targetRect}
           event={event}
         >
           <Component event={event} />

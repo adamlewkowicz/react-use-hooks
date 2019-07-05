@@ -5,11 +5,12 @@ import { TooltipContext } from "./context";
 export function useTooltip<T extends HTMLElement>(
   TooltipComponent: TooltipComponent
 ) {
-  const { setComponent, setEvent } = useContext(TooltipContext);
+  const { setComponent, setEvent, setTargetRect } = useContext(TooltipContext);
 
   function handleMouseOver(event: MouseEvent<T>) {
-    setComponent(TooltipComponent);
     setEvent<T>(event);
+    setTargetRect(event.currentTarget.getBoundingClientRect());
+    setComponent(TooltipComponent);
   }
 
   function handleMouseOut() {
