@@ -9,7 +9,7 @@ export function useTooltip<T extends HTMLElement>(
 
   function handleMouseOver(event: MouseEvent<T>) {
     setComponent(TooltipComponent);
-    setEvent(event);
+    setEvent<T>(event);
   }
 
   function handleMouseOut() {
@@ -17,7 +17,7 @@ export function useTooltip<T extends HTMLElement>(
   }
 
   function handleMouseMove(event: MouseEvent<T>) {
-    setEvent(event);
+    setEvent<T>(event);
   }
 
   return {

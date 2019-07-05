@@ -5,7 +5,7 @@ import { TooltipContext } from "./context";
 
 interface TooltipProviderProps {
   children: ReactNode
-  container?: (props: ContainerProps) => React.ReactElement | any
+  container?: (props: ContainerProps) => React.ReactElement
 }
 export function TooltipProvider({
   children,
@@ -23,7 +23,7 @@ export function TooltipProvider({
 
   return (
     <>
-      <TooltipContext.Provider value={value as any}>
+      <TooltipContext.Provider value={value}>
         {children}
       </TooltipContext.Provider>
       {Component && (

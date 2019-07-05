@@ -9,4 +9,4 @@ export interface TooltipComponentProps {
   event: MouseEvent<any>
 }
 
-export type TooltipComponent = (props: TooltipComponentProps) => React.ReactNode;
+export type TooltipComponent = (props: TooltipComponentProps) => JSX.Element;
