@@ -16,12 +16,9 @@ function App() {
         </div>
       )}
     >
-      <div {...useTooltip(({ event }) => (
-        <> 
-          <p>Tooltip details</p>
-          <div>
-            You can place everything in it's content
-          </div>
+      <div {...useTooltip(() => (
+        <>
+          Some amazing tooltip content
         </>
       ))}>
         If you hover me, you gonna see the tooltip.

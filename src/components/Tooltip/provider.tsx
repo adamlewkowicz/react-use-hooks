@@ -11,28 +11,22 @@ export function TooltipProvider({
   children,
   container: Container
 }: TooltipProviderProps) {
-  const [visible, setVisible] = useState(false);
   const [Component, setComponent] = useState<null | TooltipComponent>(null);
   const [event, setEvent] = useState<null | MouseEvent<any>>(null);
   
   const value = useMemo(() => ({
-    visible,
-    setVisible,
     Component,
-    setComponent
-  }), [visible, setVisible, Component, setComponent]);
-
-
-  function handleMouseMove(event: MouseEvent<any>) {
-    setEvent(event);
-  }
+    setComponent,
+    event,
+    setEvent
+  }), [Component, setComponent, event, setEvent]);
 
   return (
     <>
       <TooltipContext.Provider value={value as any}>
         {children}
       </TooltipContext.Provider>
-      {visible && (
+      {Component && (
         Container ? (
           <Container event={event}>
             <Component event={event} />

@@ -4,27 +4,25 @@ import { TooltipContext } from "./context";
 
 export function useTooltip<T extends HTMLElement>(
   TooltipComponent: TooltipComponent
-  // tooltipComponent: (event: MouseEvent<T>) => TooltipComponent
 ) {
-  const { setComponent } = useContext(TooltipContext);
+  const { setComponent, setEvent } = useContext(TooltipContext);
 
   function handleMouseOver(event: MouseEvent<T>) {
-    setComponent(
-      // <tooltipComponent
-
-      // />
-    );
+    setComponent(TooltipComponent);
+    setEvent(event);
   }
 
   function handleMouseOut() {
+    setComponent(null);
   }
 
-  return (
-    <TooltipComponent />
-  )
+  function handleMouseMove(event: MouseEvent<T>) {
+    setEvent(event);
+  }
 
   return {
-    onMouseOver: handleMouseOver,
-    onMouseOut: handleMouseOut
+    onMouseEnter: handleMouseOver,
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseOut
   }
 }
