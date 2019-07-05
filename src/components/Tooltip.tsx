@@ -1,4 +1,5 @@
-import { useState, ReactNode, MouseEvent } from "react";
+import * as React from "react";
+import { useState, ReactNode, MouseEvent, useContext, createContext, useMemo } from "react";
 import * as ReactDOM from "react-dom";
 
 const tooltipRoot = document.getElementById('tooltip');
@@ -39,20 +40,67 @@ function TooltipContainer({ children }: any) {
 }
 
 
-function ComponentWithTooltip() {
+interface TooltipContext {
+  visible: boolean
+  setVisible: () => boolean
+  Component: ReactNode
+  setComponent: () => ReactNode
+}
+const TooltipContext = createContext(null);
+
+interface TooltipProviderProps {
+  children: ReactNode
+  container?: typeof React.Component
+}
+function TooltipProvider({
+  children,
+  container: Container
+}: TooltipProviderProps) {
+  const [visible, setVisible] = useState(false);
+  const [Component, setComponent] = useState(null);
+  
+  const value = useMemo(() => ({
+    visible,
+    setVisible,
+    Component, setComponent
+  }), [visible, setVisible, Component, setComponent]);
+
+
   return (
-    <div {...useTooltip(({ screenX, screenY }) =>
-      <TooltipContainer
-        screenX={screenX}
-        screenY={screenY}
-      >
-        <p>Tooltip details</p>
-        <div>
-          You can place everything in it's content
-        </div>
-      </TooltipContainer>
-    )}>
-      If you hover me, you gonna see the tooltip.
-    </div>
+    <>
+      <TooltipContext.Provider value={value}>
+        {children}
+      </TooltipContext.Provider>
+      {visible && (
+        Container ? (
+          <Container children={<Component />} />
+        ) : (
+          <Component />
+        )
+      )}
+    </>
+  );
+}
+
+
+function App() {
+  return (
+    <TooltipProvider
+      
+    >
+      <div {...useTooltip(({ screenX, screenY }) =>
+        <TooltipContainer
+          screenX={screenX}
+          screenY={screenY}
+        >
+          <p>Tooltip details</p>
+          <div>
+            You can place everything in it's content
+          </div>
+        </TooltipContainer>
+      )}>
+        If you hover me, you gonna see the tooltip.
+      </div>
+    </TooltipProvider>
   );
 }
