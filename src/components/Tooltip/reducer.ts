@@ -1,4 +1,4 @@
-import { TooltipComponent } from "./types";
+import { TooltipComponent, ComponentRect } from "./types";
 import { MouseEvent } from "react";
 
 export interface TooltipReducerState {
@@ -53,5 +53,3 @@ export type TooltipReducerAction =
   | TooltipShow
   | TooltipHide
   | UpdateEvent;
-
-type ComponentRect = DOMRect | ClientRect;

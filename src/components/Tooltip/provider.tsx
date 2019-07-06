@@ -14,7 +14,7 @@ export function TooltipProvider({
   ...containerOptions
 }: TooltipProviderProps) {
   const [state, dispatch] = useReducer(tooltipReducer, defaultState);
-  const { Component, event, rect } = state;
+  const { Component, ...props } = state;
   
   return (
     <>
@@ -24,10 +24,9 @@ export function TooltipProvider({
       {Component && (
         <Container
           {...containerOptions}
-          rect={rect}
-          event={event}
+          {...props}
         >
-          <Component event={event} />
+          <Component {...props} />
         </Container>
       )}
     </>
