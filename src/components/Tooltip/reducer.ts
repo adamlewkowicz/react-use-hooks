@@ -23,7 +23,7 @@ export function tooltipReducer(
       ...state,
       event: action.payload
     }
-    case 'TOOLTIP_HIDE': return {
+    case 'HIDE_TOOLTIP': return {
       ...state,
       Component: null
     }
@@ -41,7 +41,7 @@ interface TooltipShow {
 }
 
 interface TooltipHide {
-  type: 'TOOLTIP_HIDE'
+  type: 'HIDE_TOOLTIP'
 }
 
 interface UpdateEvent {
@@ -49,7 +49,7 @@ interface UpdateEvent {
   payload: MouseEvent<any>
 }
 
-type TooltipReducerAction = 
+export type TooltipReducerAction = 
   | TooltipShow
   | TooltipHide
   | UpdateEvent;

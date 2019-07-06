@@ -1,8 +1,8 @@
 import * as React from "react";
-import { ReactNode, MouseEvent, useState, useMemo } from "react";
-import { TooltipComponent } from "./types";
+import { ReactNode, useReducer } from "react";
 import { TooltipContext } from "./context";
 import { TooltipContainer, TooltipContainerOptions } from "./TooltipContainer";
+import { tooltipReducer, defaultState } from "./reducer";
 
 interface TooltipProviderProps extends TooltipContainerOptions {
   children: ReactNode
@@ -13,25 +13,18 @@ export function TooltipProvider({
   container: Container = TooltipContainer,
   ...containerOptions
 }: TooltipProviderProps) {
-  const [Component, setComponent] = useState<null | TooltipComponent>(null);
-  const [event, setEvent] = useState<null | MouseEvent<any>>(null);
-  const [targetRect, setTargetRect] = useState<null | DOMRect | ClientRect>(null);
+  const [state, dispatch] = useReducer(tooltipReducer, defaultState);
+  const { Component, event, rect } = state;
   
-  const value = useMemo(() => ({
-    setComponent,
-    setEvent,
-    setTargetRect
-  }), [setComponent, setEvent, setTargetRect]);
-
   return (
     <>
-      <TooltipContext.Provider value={value}>
+      <TooltipContext.Provider value={dispatch}>
         {children}
       </TooltipContext.Provider>
       {Component && (
         <Container
           {...containerOptions}
-          rect={targetRect}
+          rect={rect}
           event={event}
         >
           <Component event={event} />

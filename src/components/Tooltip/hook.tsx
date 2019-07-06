@@ -5,20 +5,28 @@ import { TooltipContext } from "./context";
 export function useTooltip<T extends HTMLElement>(
   TooltipComponent: TooltipComponent
 ) {
-  const { setComponent, setEvent, setTargetRect } = useContext(TooltipContext);
+  const dispatch = useContext(TooltipContext);
 
   function handleMouseEnter(event: MouseEvent<T>) {
-    setEvent<T>(event);
-    setTargetRect(event.currentTarget.getBoundingClientRect());
-    setComponent(TooltipComponent);
+    dispatch({
+      type: 'SHOW_TOOLTIP',
+      payload: {
+        Component: TooltipComponent,
+        rect: event.currentTarget.getBoundingClientRect(),
+        event
+      }
+    });
   }
 
   function handleMouseMove(event: MouseEvent<T>) {
-    setEvent<T>(event);
+    dispatch({
+      type: 'UPDATE_EVENT',
+      payload: event
+    });
   }
 
   function handleMouseLeave() {
-    setComponent(null);
+    dispatch({ type: 'HIDE_TOOLTIP' });
   }
 
   return {
