@@ -14,7 +14,7 @@ function Component() {
 
 jest.useFakeTimers();
 
-test('returns current timestamp', () => {
+test('returns current timestamp and increments on each second', () => {
   const firstTimestamp = 1000;
   const secondTimestamp = 1001;
 

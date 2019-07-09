@@ -3,8 +3,11 @@ import { fetchReducer, initialState, FetchAction, FetchState } from './reducer';
 import { useLazyRef } from '../useLazyRef';
 
 /**
- * Stateful Fetch API for handling requests declaratively.
- * Uses AbortController to abort previous calls, or to stop calls that have not been finished before unmount.
+ * Fetch-like API for handling async requests declaratively.
+ * Uses AbortController to cancel previous calls, or to stop calls that have not been finished before unmount.
+ * @param url - request `URL`.
+ * @param config - Fetch request configuration.
+ * @param depsOrOptions - List of dependecies, or options for `useFetch` hook.
  * @example
  * const { data: product, isLoading } = useFetch(`domain.com/products/${id}`);
  * 

@@ -4,6 +4,7 @@ import { usePrevState } from '../usePrevState';
 /**
  * Returns loaded from Local Storage, stateful value, and function to update it.
  * Automatically updates data in Local Storage, based on state updates.
+ * @param initialData - initial data that is merged with Local Storage data on initialization.
  * @example
  * const defaultData = { darkTheme: false };
  * const [storage, setStorage] = useLocalStorage(defaultData);

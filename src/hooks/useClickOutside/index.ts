@@ -1,13 +1,14 @@
 import { useRef, useEffect, useCallback } from "react";
 
 /**
- * Calls callback, if clicked element was placed outside of the referenced element. 
+ * Calls callback, if clicked element was placed outside of the referenced element.
+ * Useful in creating modals, popups etc.
+ * @param callback - function that is invoked after user has clicked outside of the specified element.
  * @example
- * const ref = useClickOutside(() => {
- *  // Callback that is invoked on each click outside.
- * });
+ * const [opened, setOpened] = useState(true);
+ * const ref = useClickOutside(() => setOpened(false));
  * 
- * return <div ref={ref}></div>;
+ * return <div ref={ref}>{ ... }</div>;
  */
 export function useClickOutside<T extends HTMLElement>(
   callback: () => void

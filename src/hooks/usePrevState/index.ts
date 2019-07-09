@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 
 /**
  * Returns mutable value with previous state.
+ * @param state - state data.
+ * @param callback - function invoked after state changes.
  * @example
  * const [counter, setCounter] = useState(1);
  * const prevCounter = usePrevState(counter);

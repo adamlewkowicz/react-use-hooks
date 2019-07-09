@@ -7,7 +7,9 @@ const defaultOptions: IntersectionObserverInit = {
 }
 
 /**
- * Creates intersection observer on returned ref.
+ * Creates intersection observer on provided element reference.
+ * @param callback - function that is invoked on intersection.
+ * @param options - `IntersectionObserver` options.
  * @example
  * const ref = useIntersectionObserver(([entry]) => {
  *   // Callback that is invoked on intersection.
